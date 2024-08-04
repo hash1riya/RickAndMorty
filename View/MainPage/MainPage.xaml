@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:RickAndMorty.ViewModel.MainViewModel"
+             xmlns:viewModel1="clr-namespace:RickAndMorty.ViewModel.CharDetailsViewModel"
+             xmlns:model="clr-namespace:RickAndMorty.Data.Model"
+             x:Class="RickAndMorty.View.MainPage.MainPage"
+             x:DataType="viewModel:MainViewModel">
+
+    <Grid
+        ColumnDefinitions="*"
+        RowDefinitions="*, 55">
+        <Border
+            Stroke="DimGray"
+            StrokeShape="RoundRectangle 5"
+            Padding="5">
+            <ScrollView>
+                <CollectionView
+                    ItemsSource="{Binding Characters}"
+                    ItemsLayout="VerticalGrid, 2">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Character">
+                            <Border
+                                StrokeShape="RoundRectangle 5"
+                                Padding="3"
+                                BackgroundColor="Gray">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        NumberOfTapsRequired="2"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ShowDetailsCommand}"
+                                        CommandParameter="{Binding Id}"/>
+                                </Border.GestureRecognizers>
+                                <Grid
+                                    ColumnDefinitions="100, *"
+                                    RowDefinitions="*"
+                                    ColumnSpacing="10">
+                                    <Image HeightRequest="100" WidthRequest="100" Source="{Binding Image}"/>
+                                    <Grid
+                                        Grid.Column="1"
+                                        RowDefinitions="*, *, *, *, *"
+                                        ColumnDefinitions="75, *">
+                                        <Label Text="Id:"/>
+                                        <Label Grid.Column="1" Text="{Binding Id}"/>
+                                        <Label Grid.Row="1" Text="Name:"/>
+                                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding Name}"/>
+                                        <Label Grid.Row="2" Text="Status:"/>
+                                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding Status}"/>
+                                        <Label Grid.Row="3" Text="Species:"/>
+                                        <Label Grid.Row="3" Grid.Column="1" Text="{Binding Species}"/>
+                                        <Label Grid.Row="4" Text="Gender:"/>
+                                        <Label Grid.Row="4" Grid.Column="1" Text="{Binding Gender}"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+        </Border>
+        <HorizontalStackLayout
+            Grid.Row="1"
+            HorizontalOptions="End"
+            VerticalOptions="Center"
+            Spacing="5">
+            <Button Text="&lt;" Command="{Binding GoToPrevCommand}" IsEnabled="{Binding IsAbleToGoBack}"/>
+            <Label Text="{Binding CurrentPage}" VerticalTextAlignment="Center"/>
+            <Button Text="&gt;" Command="{Binding GoToNextCommand}" IsEnabled="{Binding IsAbleToGoForward}"/>
+        </HorizontalStackLayout>
+    </Grid>
+
+</ContentPage>
